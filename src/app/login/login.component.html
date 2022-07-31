@@ -4,14 +4,24 @@
       <div class="col-md-6 col-md-offset-3 col-xs-12">
         <h1 class="text-xs-center">Sign in</h1>
 
-        <form>
+        <form #form="ngForm" (ngSubmit)="doLogin(form)">
           <fieldset class="form-group">
             <input
               name="email"
               class="form-control form-control-lg"
               type="text"
               placeholder="Email"
+              [(ngModel)]="loginForm.email"
+              required
+              email
+              #mEmail="ngModel"
             />
+            <p *ngIf="isInValid(mEmail, form) && mEmail.errors?.['required']">
+              email為必填
+            </p>
+            <p *ngIf="isInValid(mEmail, form) && mEmail.errors?.['email']">
+              email格式不符
+            </p>
           </fieldset>
           <fieldset class="form-group">
             <input
@@ -19,9 +29,29 @@
               class="form-control form-control-lg"
               type="password"
               placeholder="Password"
+              [(ngModel)]="loginForm.password"
+              required
+              #mPassword="ngModel"
+              minlength="4"
             />
+            <p
+              *ngIf="isInValid(mPassword, form) && mPassword.errors?.['required']"
+            >
+              密碼為必填
+            </p>
+            <p
+              *ngIf="isInValid(mPassword, form) && mPassword.errors?.['minlength']"
+            >
+              密碼長度不夠
+            </p>
           </fieldset>
-          <button class="btn btn-lg btn-primary pull-xs-right">Sign in</button>
+          <button
+            type="submit"
+            class="btn btn-lg btn-primary pull-xs-right"
+            [disabled]="form.invalid"
+          >
+            Sign in
+          </button>
         </form>
       </div>
     </div>
