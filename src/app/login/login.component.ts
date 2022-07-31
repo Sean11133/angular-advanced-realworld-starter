@@ -15,14 +15,28 @@ export class LoginComponent implements OnInit {
     email: '',
     password: '',
   };
-  constructor(private router: Router, private loginService: LoginService) {}
 
-  ngOnInit(): void {}
+  redirectUrl = '';
+
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private loginService: LoginService
+  ) {}
+
+  ngOnInit(): void {
+    this.route.queryParamMap.subscribe((s) => {
+      this.redirectUrl = s.get('redirect') || '';
+    });
+  }
   doLogin(form: NgForm) {
     if (form.valid) {
       this.loginService.login(this.loginForm).subscribe({
         next: (result) => {
           localStorage.setItem('Token', result.user.token);
+          if (this.redirectUrl !== '') {
+            this.router.navigate([this.redirectUrl]);
+          }
           this.router.navigate(['/']);
         },
         error: (error: HttpErrorResponse) => {
