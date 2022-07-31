@@ -8,7 +8,6 @@ import { Article } from 'src/app/interfaces/article';
   styleUrls: ['./post.component.css'],
 })
 export class PostComponent implements OnInit {
-  id: string | null = '';
   article?: Article;
 
   constructor(
@@ -19,16 +18,13 @@ export class PostComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
-      this.id = params.get('id') || '';
-
-      this.getPost(this.id);
+      this.getPost(params.get('id') || '');
     });
   }
 
   getPost(id: string) {
     this.post.getArticle(id).subscribe((s) => {
       this.article = s.article;
-      console.log(s);
     });
   }
 }
