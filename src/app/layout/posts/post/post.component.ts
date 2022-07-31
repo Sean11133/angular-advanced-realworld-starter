@@ -9,16 +9,8 @@ import { Article } from 'src/app/interfaces/article';
 })
 export class PostComponent implements OnInit {
   id: string | null = '';
-  article: Article = {
-    id: '',
-    title: '',
-    description: '',
-    body: '',
-    tagList: [],
-    createdAt: '',
-    updatedAt: '',
-    author: '',
-  };
+  article?: Article;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -27,14 +19,14 @@ export class PostComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
-      this.id = params.get('id');
+      this.id = params.get('id') || '';
 
       this.getPost(this.id);
     });
   }
 
-  getPost(id: string | null) {
-    this.post.getArticle(id || '').subscribe((s) => {
+  getPost(id: string) {
+    this.post.getArticle(id).subscribe((s) => {
       this.article = s.article;
       console.log(s);
     });
